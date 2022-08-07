@@ -136,10 +136,12 @@
 
                                             <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}"><i
                                                 class="pe-7s-shopbag"></i></button>
-                                        
+                                            <form method='post'>
+                                            {% csrf_token %}
+                                            <input type = 'hidden' name=product_id value='{{product.id}}' />
                                             <button class="action wishlist addwishlist" data-product="{{product.id}}" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist-{{forloop.counter}}"><i
                                                 class="pe-7s-like"></i></button>
-                                        
+                                            </form>
                                             <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}"><i class="pe-7s-look"></i></button>
                                         
                                          

@@ -508,35 +508,27 @@
                 </div>
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
+                        {% for wishlist1 in wish_list %}
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
+                            <a href="single-product.html" class="image"><img src="{{wishlist1.product.image.url}}" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Modern Smart Phone</a>
-                                <span class="quantity-price">1 x <span class="amount">$21.86</span></span>
-                                <a href="#" class="remove">×</a>
+                                <a href="single-product.html" class="title">{{wishlist1.product.title}}</a>
+                                <span class="quantity-price">1 x <span class="amount">${{wishlist1.product.get_price}}</span></span>
+                                <form method = 'post'>
+                                {% csrf_token %}
+                                    <input type='hidden' name='product_id' value='{{wishlist1.product.id}}' />
+                                   
+                                    <input  style='width:auto;  top:-40px; border:none; font-size:24px;' type='submit' class="remove" value='x'></input>
+                                </form>
                             </div>
                         </li>
-                        <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="single-product.html" class="title">Bluetooth Headphone</a>
-                                <span class="quantity-price">1 x <span class="amount">$13.28</span></span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="single-product.html" class="title">Smart Music Box</a>
-                                <span class="quantity-price">1 x <span class="amount">$17.34</span></span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
+                        {% endfor %}
+                        
                     </ul>
                 </div>
                 <div class="foot">
                     <div class="buttons">
-                        <a href="wishlist.html" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+                        <a href="{% url 'wishlist' %}" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
                     </div>
                 </div>
             </div>

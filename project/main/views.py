@@ -82,6 +82,22 @@ def home(request):
 
     price_min = lowest_price["price__min"]
 
+    if request.user.is_authenticated:
+        wish_list = Wishlist.objects.filter(user = request.user)
+    else:
+        wish_list = []
+    
+    if request.method == "POST" and request.user.is_authenticated:
+        user = request.user
+        product = Product.objects.get(id = request.POST.get('product_id'))
+
+        try:
+            wishlist = Wishlist.objects.get(user=user,product= product)
+            wishlist.delete()
+        
+        except:
+            Wishlist.objects.create(user = user, product=product)
+
         
 
 
@@ -91,7 +107,8 @@ def home(request):
         'bannerlists':bannerlists,
         'cheapests':cheapests,
         'lowest_products':lowest_products,
-        'price_min':price_min
+        'price_min':price_min,
+        'wish_list':wish_list
     }
     return render(request, 'home.html', context)
 
@@ -120,7 +137,27 @@ def contact(request):
 def product_slider(request):
     return render(request, 'product-slider.html')
 def wishlist(request):
-    return render(request, 'wishlist.html')
+    if request.user.is_authenticated:
+        wish_list = Wishlist.objects.filter(user = request.user)
+        context = {
+            'wish_list':wish_list,
+        }
+          
+    if request.method == "POST" and request.user.is_authenticated and request.POST.get('count'):
+            print(request.POST)
+    if request.method == "POST" and request.user.is_authenticated and  not request.POST.get('count'):
+        print('post')
+        user = request.user
+        product  = Product.objects.get(id= request.POST.get('product_id'))
+        
+        try:
+            wishlist = Wishlist.objects.get(user=user, product=product)
+            wishlist.delete()
+            print(wishlist)    
+
+        except:
+            Wishlist.objects.create(user=user, product=product)
+    return render(request, 'wishlist.html',context)
 def shop(request):
     products = Product.objects.filter(status='Publish').order_by('-created_date')
     categories = Category.objects.all()
@@ -148,6 +185,8 @@ def shop(request):
         products = Product.objects.filter(status='Publish', condition='New')
     elif OLDID:
         products = Product.objects.filter(status='Publish', condition='Old')
+
+    
     
     
     
